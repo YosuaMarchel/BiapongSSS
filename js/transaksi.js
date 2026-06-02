@@ -3,6 +3,15 @@
 const TransaksiModule = (() => {
   let selectedId = null;
 
+  document.getElementById("btn-toggle-filter").addEventListener("click", () => {
+    const bar = document.getElementById("filter-bar");
+    const btn = document.getElementById("btn-toggle-filter");
+    const isOpen = bar.classList.toggle("open");
+    btn.classList.toggle("active", isOpen);
+    btn.setAttribute("aria-expanded", String(isOpen));
+    btn.setAttribute("aria-label", isOpen ? "Sembunyikan filter" : "Tampilkan filter");
+  });
+
   function getFilters() {
     return {
       nama: (document.getElementById("filter-nama").value || "").trim().toLowerCase(),

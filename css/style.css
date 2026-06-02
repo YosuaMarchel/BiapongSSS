@@ -112,7 +112,24 @@ body {
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border-light);
   color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
+.filter-toggle-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  padding: 2px 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: background 0.15s, color 0.15s;
+  line-height: 1;
+}
+.filter-toggle-btn:hover { background: var(--primary-light); color: var(--primary); }
+.filter-toggle-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
 .section-title { font-size: 17px; font-weight: 800; text-align: center; margin-bottom: 8px; color: var(--text); }
 .section-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 12px; font-size: 13px; }
@@ -289,7 +306,7 @@ input[type="number"] { -moz-appearance: textfield; }
 
 /* ── Filter Bar ──────────────────────────────── */
 .filter-bar {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
@@ -297,6 +314,7 @@ input[type="number"] { -moz-appearance: textfield; }
   margin-bottom: 4px;
   border-bottom: 1px solid var(--border);
 }
+.filter-bar.open { display: flex; }
 
 .filter-label {
   font-size: 12px;
