@@ -233,7 +233,7 @@ const TransaksiModule = (() => {
       tr.appendChild(tdAct);
 
       tr.addEventListener("click", () => {
-        if (!isSelesai) selectRow(t.id);
+        selectRow(t.id);
       });
       tbody.appendChild(tr);
     });
@@ -274,12 +274,6 @@ const TransaksiModule = (() => {
     }
 
     const tanggal = App.getDateKey();
-    const t = DataStore.getTransaksiById(tanggal, selectedId);
-    if (t && t.statusPesanan === "Sudah Diambil") {
-      Components.showAlert("Peringatan", "Transaksi yang sudah diambil tidak bisa diubah.");
-      return;
-    }
-
     const newStatus = document.getElementById("edit-status-pesanan").value;
     const newBayar = document.getElementById("edit-status-bayar").value;
     const newBayarVia = document.getElementById("edit-bayar-via").value.trim();
