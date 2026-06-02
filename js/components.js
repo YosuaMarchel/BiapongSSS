@@ -171,11 +171,14 @@ const Components = (() => {
     });
   }
 
+  let _notifRequested = false;
+
   function requestNotificationPermission() {
     if (!("Notification" in window)) return;
-    if (Notification.permission === "default") {
-      Notification.requestPermission();
-    }
+    if (Notification.permission === "granted") return;
+    if (_notifRequested) return;
+    _notifRequested = true;
+    Notification.requestPermission();
   }
 
   function sendNotification(title, body) {
