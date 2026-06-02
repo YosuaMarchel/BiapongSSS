@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="description" content="Aplikasi Penjualan Bakpao/Biapong SSS">
+  <title>BIAPONG SSS - Aplikasi Penjualan</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header" role="banner">
+    <h1>BIAPONG SSS</h1>
+    <span class="date-info" id="header-date" aria-live="polite"></span>
+    <button class="menu-toggle-btn" id="btn-menu-toggle" aria-label="Buka menu" aria-expanded="false">&#9776;</button>
+  </header>
+
+  <!-- ═══ Tab Navigation ═══ -->
+  <nav class="tab-bar" role="tablist" aria-label="Menu utama">
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="tab-stok" role="tab" aria-selected="true" aria-controls="tab-stok">Stok</button>
+      <button class="tab-btn" data-tab="tab-transaksi" role="tab" aria-selected="false" aria-controls="tab-transaksi">Transaksi</button>
+      <button class="tab-btn" data-tab="tab-kukusan" role="tab" aria-selected="false" aria-controls="tab-kukusan">Kukusan Timer</button>
+    </div>
+  </nav>
+
+  <!-- ═══ Slide-out Menu ═══ -->
+  <div class="slide-menu-overlay" id="slide-menu-overlay"></div>
+  <aside class="slide-menu" id="slide-menu" role="dialog" aria-label="Menu tambahan">
+    <div class="slide-menu-header">
+      <span class="slide-menu-title">Menu</span>
+      <button class="slide-menu-close" id="btn-menu-close" aria-label="Tutup menu">&times;</button>
+    </div>
+    <div class="slide-menu-body">
+      <button class="btn slide-menu-btn" id="btn-import-excel">
+        <span class="slide-menu-icon">&#128196;</span> Import dari Excel
+      </button>
+      <button class="btn btn-success slide-menu-btn" id="btn-export-excel">
+        <span class="slide-menu-icon">&#128190;</span> Export ke Excel
+      </button>
+      <hr class="slide-menu-divider">
+      <button class="btn btn-danger slide-menu-btn" id="btn-reset-hari">
+        <span class="slide-menu-icon">&#128260;</span> Reset Hari Ini
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════════
+       TAB: STOK
+       ═══════════════════════════════════════════════ -->
+  <section id="tab-stok" class="tab-content active" role="tabpanel" aria-label="Kelola Stok">
+    <div class="section-title">KELOLA STOK BIAPONG</div>
+    <p class="section-subtitle" id="stok-tanggal">Tanggal: -</p>
+
+    <div class="card">
+      <div class="table-scroll">
+        <table class="data-table" aria-label="Tabel stok biapong">
+          <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th>Varian Rasa</th>
+              <th class="text-center">Stok Awal</th>
+              <th class="text-center">Terjual</th>
+              <th class="text-center">Sisa Stok</th>
+              <th class="text-center">Status</th>
+              <th class="text-right">Pendapatan</th>
+            </tr>
+          </thead>
+          <tbody id="stok-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Edit Stok Awal</div>
+      <div class="qty-grid" id="stok-edit-grid" role="group" aria-label="Input stok awal per varian"></div>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-simpan-stok">Simpan Stok</button>
+        <button class="btn" id="btn-refresh-stok">Refresh Data</button>
+      </div>
+    </div>
+
+    <div class="summary-bar" id="stok-summary" aria-live="polite">Total Stok Awal: 0 | Total Terjual: 0 | Total Sisa: 0</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TAB: TRANSAKSI
+       ═══════════════════════════════════════════════ -->
+  <section id="tab-transaksi" class="tab-content" role="tabpanel" aria-label="Kelola Transaksi">
+    <div class="card">
+      <div class="card-title">Transaksi Baru</div>
+
+      <div class="form-row">
+        <label class="form-label" for="input-nama">Nama Pemesan:</label>
+        <input type="text" class="form-input input-nama" id="input-nama" placeholder="Nama pemesan" maxlength="100" autocomplete="off">
+      </div>
+
+      <div class="form-row">
+        <label class="form-label" for="promo-select">Promo:</label>
+        <select class="form-select" id="promo-select">
+          <option>Tanpa Promo</option>
+          <option>Beli 2 harga 25rb</option>
+          <option>Beli 2 Gratis 1</option>
+          <option>Follow Sosmed</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label" for="input-keterangan">Keterangan:</label>
+        <input type="text" class="form-input input-keterangan" id="input-keterangan" placeholder="Keterangan" autocomplete="off">
+      </div>
+
+      <div class="qty-section-label">Jumlah per Varian:</div>
+      <div class="qty-grid" id="qty-grid-transaksi" role="group" aria-label="Input jumlah per varian"></div>
+
+      <div class="preview-box" id="preview-text" aria-live="polite">Total: 0 pcs | Gratis: 0 | Dibayar: 0 | Harga: Rp 0</div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-tambah-transaksi">Tambah Transaksi</button>
+        <button class="btn" id="btn-reset-form">Reset Form</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Daftar Transaksi</div>
+      <div class="filter-bar" role="search" aria-label="Filter transaksi">
+        <label for="filter-nama" class="filter-label">Cari Nama:</label>
+        <input type="text" class="form-input filter-input" id="filter-nama" placeholder="Cari nama pemesan..." autocomplete="off">
+
+        <label for="filter-status-pesanan" class="filter-label">Status Pesanan:</label>
+        <select class="form-select" id="filter-status-pesanan">
+          <option value="">Semua</option>
+          <option>Dipesan</option>
+          <option>Ada di Kukusan</option>
+          <option>Siap Diambil</option>
+          <option>Sudah Diambil</option>
+          <option>Batal</option>
+        </select>
+
+        <label for="filter-status-bayar" class="filter-label">Status Bayar:</label>
+        <select class="form-select" id="filter-status-bayar">
+          <option value="">Semua</option>
+          <option>Sudah Dibayar</option>
+          <option>Belum Dibayar</option>
+        </select>
+
+        <button class="btn" id="btn-reset-filter">Reset Filter</button>
+        <span class="filter-count" id="filter-count" aria-live="polite"></span>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table" aria-label="Tabel transaksi">
+          <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th>Nama</th>
+              <th>Varian</th>
+              <th class="text-center">Qty</th>
+              <th>Promo</th>
+              <th class="text-right">Total Harga</th>
+              <th class="text-center">Status Pesanan</th>
+              <th class="text-center">Status Bayar</th>
+              <th class="text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="transaksi-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Ubah Status Baris Terpilih</div>
+      <div class="edit-bar">
+        <label class="form-label" for="edit-status-bayar">Status Bayar:</label>
+        <select class="form-select" id="edit-status-bayar">
+          <option value="">-- Pilih --</option>
+          <option>Sudah Dibayar</option>
+          <option>Belum Dibayar</option>
+        </select>
+
+        <label class="form-label edit-label" for="edit-bayar-via">Bayar via:</label>
+        <select class="form-select" id="edit-bayar-via">
+          <option value="">-- Pilih --</option>
+          <option>Tunai</option>
+          <option>QRIS</option>
+          <option>Transfer</option>
+        </select>
+
+        <label class="form-label edit-label" for="edit-status-pesanan">Status Pesanan:</label>
+        <select class="form-select" id="edit-status-pesanan">
+          <option value="">-- Pilih --</option>
+          <option>Dipesan</option>
+          <option>Ada di Kukusan</option>
+          <option>Siap Diambil</option>
+          <option>Sudah Diambil</option>
+          <option>Batal</option>
+        </select>
+
+        <button class="btn btn-primary edit-label" id="btn-update-status">Update</button>
+        <button class="btn" id="btn-refresh-transaksi">Refresh</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TAB: KUKUSAN TIMER
+       ═══════════════════════════════════════════════ -->
+  <section id="tab-kukusan" class="tab-content" role="tabpanel" aria-label="Timer Kukusan">
+    <div class="section-title">TIMER KUKUSAN BIAPONG</div>
+
+    <div class="card">
+      <div class="timer-settings">
+        <label for="timer-duration">Durasi Timer (menit):</label>
+        <input type="number" class="form-input input-timer-duration" id="timer-duration" value="10" min="1" max="60">
+        <button class="btn" id="btn-save-duration">Simpan Default</button>
+        <button class="btn btn-spacer" id="btn-refresh-kukusan">Refresh</button>
+      </div>
+    </div>
+
+    <div id="timer-cards" role="list" aria-label="Daftar timer kukusan"></div>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="app-footer" role="contentinfo">Biapong SSS &mdash; Aplikasi Penjualan Cross-Platform</footer>
+
+  <!-- ═══ ExcelJS for styled Excel export ═══ -->
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+
+  <!-- App modules (order matters: dependencies first) -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/calculations.js"></script>
+  <script src="js/validators.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/stok.js"></script>
+  <script src="js/transaksi.js"></script>
+  <script src="js/kukusan.js"></script>
+  <script src="js/exporter.js"></script>
+  <script src="js/importer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
