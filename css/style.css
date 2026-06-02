@@ -434,6 +434,12 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 .btn-danger-outline:hover { background: var(--danger-light); }
 
+.btn:disabled, .btn-sm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* ── Edit Modal (larger dialog) ──────────────── */
 .edit-modal-box {
   max-width: 520px;

@@ -194,24 +194,38 @@ const TransaksiModule = (() => {
       const tdAct = document.createElement("td");
       tdAct.className = "text-center action-cell";
 
+      const isSelesai = t.statusPesanan === "Sudah Diambil";
+
       const btnEdit = document.createElement("button");
       btnEdit.className = "btn btn-sm btn-edit";
       btnEdit.textContent = "Edit";
       btnEdit.type = "button";
       btnEdit.setAttribute("aria-label", "Edit transaksi");
-      btnEdit.addEventListener("click", (e) => { e.stopPropagation(); openEditModal(t.id); });
+      if (isSelesai) {
+        btnEdit.disabled = true;
+        btnEdit.title = "Transaksi sudah diambil, tidak bisa diedit";
+      } else {
+        btnEdit.addEventListener("click", (e) => { e.stopPropagation(); openEditModal(t.id); });
+      }
 
       const btnDel = document.createElement("button");
       btnDel.className = "btn btn-sm btn-danger-outline";
       btnDel.textContent = "Hapus";
       btnDel.type = "button";
       btnDel.setAttribute("aria-label", "Hapus transaksi");
-      btnDel.addEventListener("click", (e) => { e.stopPropagation(); hapusTransaksi(t.id); });
+      if (isSelesai) {
+        btnDel.disabled = true;
+        btnDel.title = "Transaksi sudah diambil, tidak bisa dihapus";
+      } else {
+        btnDel.addEventListener("click", (e) => { e.stopPropagation(); hapusTransaksi(t.id); });
+      }
 
       tdAct.append(btnEdit, btnDel);
       tr.appendChild(tdAct);
 
-      tr.addEventListener("click", () => selectRow(t.id));
+      tr.addEventListener("click", () => {
+        if (!isSelesai) selectRow(t.id);
+      });
       tbody.appendChild(tr);
     });
 
@@ -247,6 +261,13 @@ const TransaksiModule = (() => {
   function updateSelectedStatus() {
     if (!selectedId) {
       Components.showAlert("Peringatan", "Pilih baris terlebih dahulu.");
+      return;
+    }
+
+    const tanggal = App.getDateKey();
+    const t = DataStore.getTransaksiById(tanggal, selectedId);
+    if (t && t.statusPesanan === "Sudah Diambil") {
+      Components.showAlert("Peringatan", "Transaksi yang sudah diambil tidak bisa diubah.");
       return;
     }
 
